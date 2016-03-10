@@ -40,6 +40,8 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c $(HEADERS)
 	$(CC) $(CFLAGS) $< -o $@
 
 $(TARGET): $(OBJECTS)
+	cd GameEngine && $(MAKE)
+	cd ..
 	$(CC) $^ -o $@ $(LDFLAGS)
 
 clean:

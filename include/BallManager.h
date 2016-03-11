@@ -45,6 +45,10 @@ public:
     void addMass(glm::vec3 pos, glm::vec3 vel, float mass, float charge);
     void addSpring(int i, int j, float k, float l, float y);
     
+    void setOutputFile(std::string filename)
+        {m_outputFile = filename; m_writeOutput=true;}
+    void writeOutputToFile();
+    
     glm::vec3 getCM();
     
 private:
@@ -63,6 +67,12 @@ private:
     
     mass_struct* m_masses;
     spring_struct** m_springs;
+    
+    bool m_hasCM = false;
+    glm::vec3 m_cm;
+    
+    bool m_writeOutput = false;
+    std::string m_outputFile;
 };
 
 #endif	/* BALLMANAGER_H */

@@ -61,7 +61,7 @@ void MainGame::initShaders() {
 }
 
 void MainGame::gameLoop() {
-    const float DESIRED_FPS = 20.0f;
+    const float DESIRED_FPS = 60.0f;
     const int MAX_PHYSICS_STEPS = 6;
     const float CAMERA_SCALE = 1.0 / 2.0f;
     m_camera.setScale(CAMERA_SCALE);
@@ -102,6 +102,10 @@ void MainGame::gameLoop() {
 
         m_fps = fpsLimiter.end();
     }
+}
+
+void MainGame::setOutputFile(std::string filename){
+    m_ballMan.setOutputFile(filename);
 }
 
 void MainGame::processInput() {

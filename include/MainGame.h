@@ -28,6 +28,7 @@ public:
     /// Runs the game
     void run(std::string filename);
 
+    void setOutputFile(std::string filename);
 private:
     /// Initializes the core systems
     void initSystems();
@@ -47,8 +48,7 @@ private:
     void drawHud();
 
     void initLevel(std::string filename);
-
-
+    
     /// Member Variables
     GameEngine::Window m_window; ///< The game window
     GameEngine::GLSLProgram m_textureProgram; ///< The shader program

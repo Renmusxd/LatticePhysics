@@ -38,12 +38,14 @@ void BallManager::update(){
     // Collisions
     correctCollisions();
     updateMasses(0);
+    m_hasCM = false;
+    if (m_writeOutput){
+        writeOutputToFile();
+    }
+}
 
-    glm::vec3 total_p(0,0,0);
-    //  for (int i = 0; i<m_size; i++){
-    //      total_p += m_masses[i].vel * m_masses[i].mass;
-    //  }
-    //  printf("p = %f\n",glm::length(total_p));
+void BallManager::writeOutputToFile(){
+    
 }
 
 void BallManager::draw(GameEngine::SpriteBatch& sb){
@@ -271,13 +273,16 @@ void BallManager::correctCollisions(){
 }
 
 glm::vec3 BallManager::getCM(){
-    glm::vec3 cm(0,0,0);
-    float total_mass = 0;
-    for (int i = 0; i<m_size; i++){
-        cm += m_masses[i].pos * m_masses[i].mass;
-        total_mass += m_masses[i].mass;
+    if (!m_hasCM){
+        glm::vec3 cm(0,0,0);
+        float total_mass = 0;
+        for (int i = 0; i<m_size; i++){
+            cm += m_masses[i].pos * m_masses[i].mass;
+            total_mass += m_masses[i].mass;
+        }
+        m_cm = cm/total_mass;
     }
-    return cm/total_mass;
+    return m_cm;
 }
 
 void BallManager::addMass(glm::vec3 pos, glm::vec3 vel, float mass, float charge){

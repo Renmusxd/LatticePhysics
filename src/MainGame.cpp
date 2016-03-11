@@ -88,14 +88,14 @@ void MainGame::gameLoop() {
         while (totalDeltaTime > 0.0f && i<MAX_PHYSICS_STEPS){
             float deltatime = std::min(totalDeltaTime, MAX_DELTA_TIME);
 
-            m_ballMan.update(deltatime);
+            m_ballMan.update();
             // call update balls with deltatime
             totalDeltaTime -= deltatime;
             i++;
         }
 
-
-//  	_camera.setPosition(_player->getPosition());
+        glm::vec3 cm = m_ballMan.getCM();
+  	m_camera.setPosition(glm::vec2(cm.x,cm.y));
         m_camera.update();
         m_hudCamera.update();
         drawGame();
@@ -188,30 +188,8 @@ void MainGame::drawHud(){
 }
 
 void MainGame::initLevel(std::string filename){
-    
     ObjectLoader ol;
     ol.initializeBallManagerFromFile(&m_ballMan, filename);
-    
-    
-    
-//    
-//    
-//    m_ballMan.init(4);
-//    
-//    m_ballMan.addMass(glm::vec3(-100,-100,0),glm::vec3(0,10,0),10,100); // bl 0
-//    m_ballMan.addMass(glm::vec3(-100,100,0),glm::vec3(0,-10,0),10,100);  // tl 1
-//    m_ballMan.addMass(glm::vec3(100,100,0),glm::vec3(0,0,0),10,100);   // tr 2
-//    m_ballMan.addMass(glm::vec3(100,-100,0),glm::vec3(0,0,0),10,100);  // br 3
-//    
-//    const float k = 0.1f;
-//    const float y = 0.0f;
-//
-//    m_ballMan.addSpring(0,1,k,200,y);
-//    m_ballMan.addSpring(1,2,k,200,y);
-//    m_ballMan.addSpring(2,3,k,200,y);
-//    m_ballMan.addSpring(3,0,k,200,y);
-//    m_ballMan.addSpring(0,2,k,283,y);
-//    m_ballMan.addSpring(1,3,k,283,y);
 }
 
 

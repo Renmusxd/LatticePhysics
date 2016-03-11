@@ -1,10 +1,3 @@
-/* 
- * File:   BallManager.h
- * Author: Sumner
- *
- * Created on June 24, 2015, 9:55 PM
- */
-
 #include <vector>
 #include <glm/glm.hpp>
 #include <SpriteBatch.h>
@@ -43,7 +36,7 @@ public:
     
     void init(const int n_masses);
     
-    void update(float dt);
+    void update();
     void updateMasses(float h);
     void draw(GameEngine::SpriteBatch& sb);
     void drawSprings(GameEngine::SpriteBatch& sb);
@@ -51,6 +44,8 @@ public:
     void drawMasses(GameEngine::SpriteBatch& sb);
     void addMass(glm::vec3 pos, glm::vec3 vel, float mass, float charge);
     void addSpring(int i, int j, float k, float l, float y);
+    
+    glm::vec3 getCM();
     
 private:
     void correctCollisions();

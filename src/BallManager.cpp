@@ -34,12 +34,12 @@ void BallManager::init(const int n_masses){
     }
 }
 
-void BallManager::update(float dt){
+void BallManager::update(){
     // Collisions
-      correctCollisions();
-      updateMasses(dt);
+    correctCollisions();
+    updateMasses(0);
 
-      glm::vec3 total_p(0,0,0);
+    glm::vec3 total_p(0,0,0);
     //  for (int i = 0; i<m_size; i++){
     //      total_p += m_masses[i].vel * m_masses[i].mass;
     //  }
@@ -48,6 +48,19 @@ void BallManager::update(float dt){
 
 void BallManager::draw(GameEngine::SpriteBatch& sb){
     drawMasses(sb);
+}
+
+void BallManager::drawMasses(GameEngine::SpriteBatch& sb){
+    for (int i = 0; i<m_size; i++){
+        mass_struct m = m_masses[i];
+        glm::vec4 renderRect(0.0f);
+        renderRect.x = (m.pos.x - MASS_RADIUS);
+        renderRect.y = (m.pos.y - MASS_RADIUS);
+        renderRect.w = 2*MASS_RADIUS;
+        renderRect.z = 2*MASS_RADIUS;
+        glm::vec4 uvRect(0.0f,0.0f,1.0f,1.0f);
+        sb.draw(renderRect,uvRect,m_masstex,0.0f,m_masscolor);
+    }
 }
 
 void BallManager::drawSprings(GameEngine::SpriteBatch& sb){
@@ -257,17 +270,14 @@ void BallManager::correctCollisions(){
      } 
 }
 
-void BallManager::drawMasses(GameEngine::SpriteBatch& sb){
+glm::vec3 BallManager::getCM(){
+    glm::vec3 cm(0,0,0);
+    float total_mass = 0;
     for (int i = 0; i<m_size; i++){
-        mass_struct m = m_masses[i];
-        glm::vec4 renderRect(0.0f);
-        renderRect.x = (m.pos.x - MASS_RADIUS);
-        renderRect.y = (m.pos.y - MASS_RADIUS);
-        renderRect.w = 2*MASS_RADIUS;
-        renderRect.z = 2*MASS_RADIUS;
-        glm::vec4 uvRect(0.0f,0.0f,1.0f,1.0f);
-        sb.draw(renderRect,uvRect,m_masstex,0.0f,m_masscolor);
+        cm += m_masses[i].pos * m_masses[i].mass;
+        total_mass += m_masses[i].mass;
     }
+    return cm/total_mass;
 }
 
 void BallManager::addMass(glm::vec3 pos, glm::vec3 vel, float mass, float charge){

@@ -15,19 +15,19 @@
 #define MASS_RADIUS 5
 
 struct spring_struct{
-    double k;
-    double l;
-    double y;
-    spring_struct(double a, double b, double c){k=a;l=b;y=c;}
+    float k;
+    float l;
+    float y;
+    spring_struct(float a, float b, float c){k=a;l=b;y=c;}
     spring_struct(){k=0;l=0;y=0;}
 };
 
 struct mass_struct{
     glm::vec3 pos;
     glm::vec3 vel;
-    double mass = 1;
-    double charge = 0;
-    mass_struct(glm::vec3 p, glm::vec3 v, double m, double q){
+    float mass = 1;
+    float charge = 0;
+    mass_struct(glm::vec3 p, glm::vec3 v, float m, float q){
         pos = p; vel = v; mass = m; charge = q;
     }
     mass_struct(){
@@ -41,19 +41,20 @@ public:
     BallManager();
     virtual ~BallManager();
     
-    void init(int width, int height, const int n_masses);
+    void init(const int n_masses);
     
     void update(float dt);
-    void updateMasses();
+    void updateMasses(float h);
     void draw(GameEngine::SpriteBatch& sb);
     void drawSprings(GameEngine::SpriteBatch& sb);
     
     void drawMasses(GameEngine::SpriteBatch& sb);
-    void addMass(glm::vec3 pos, glm::vec3 vel, double mass, double charge);
-    void addSpring(int i, int j, double k, double l, double y);
+    void addMass(glm::vec3 pos, glm::vec3 vel, float mass, float charge);
+    void addSpring(int i, int j, float k, float l, float y);
     
 private:
     void correctCollisions();
+    void calcStep(float t, float* src, float* dest);
     
     GLuint m_springtex;
     GLuint m_masstex;

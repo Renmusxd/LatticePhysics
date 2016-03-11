@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <Window.h>
 #include <GLSLProgram.h>
 #include <Camera2D.h>
@@ -24,7 +26,7 @@ public:
     ~MainGame();
 
     /// Runs the game
-    void run();
+    void run(std::string filename);
 
 private:
     /// Initializes the core systems
@@ -44,7 +46,7 @@ private:
     /// Renders Font
     void drawHud();
 
-    void initLevel();
+    void initLevel(std::string filename);
 
 
     /// Member Variables

@@ -10,6 +10,7 @@
 #include <glm/gtx/rotate_vector.hpp>
 
 #include "MainGame.h"
+#include "ObjectLoader.h"
 
 MainGame::MainGame() :
 	m_screenWidth(500),
@@ -24,9 +25,9 @@ MainGame::~MainGame() {
 
 }
 
-void MainGame::run() {
+void MainGame::run(std::string filename) {
 	initSystems();
-	initLevel();
+	initLevel(filename);
 	gameLoop();
 }
 
@@ -60,7 +61,7 @@ void MainGame::initShaders() {
 }
 
 void MainGame::gameLoop() {
-    const float DESIRED_FPS = 120.0f;
+    const float DESIRED_FPS = 20.0f;
     const int MAX_PHYSICS_STEPS = 6;
     const float CAMERA_SCALE = 1.0 / 2.0f;
     m_camera.setScale(CAMERA_SCALE);
@@ -152,19 +153,12 @@ void MainGame::drawGame() {
    
    m_ballMan.draw(m_agentSpriteBatch);
    m_ballMan.drawSprings(m_agentSpriteBatch);
-	// Draw humans
-//	for (int i = 0; i<_humans.size(); i++){
-//		if (_camera.isBoxInView(_humans[i]->getPosition(),agentDims)){
-//			_humans[i]->draw(_agentSpriteBatch);
-//		}
-//	}
 
    m_agentSpriteBatch.end();
    m_agentSpriteBatch.renderBatch();
    
 //   drawHud();
     m_textureProgram.unuse();
-   
 
     // Swap our buffer and draw everything to the screen!
     m_window.swapBuffer();
@@ -193,23 +187,31 @@ void MainGame::drawHud(){
     m_hudSpriteBatch.renderBatch();
 }
 
-void MainGame::initLevel(){
-    m_ballMan.init(m_screenWidth, m_screenHeight,4);
-//    
-    m_ballMan.addMass(glm::vec3(-100,-100,0),glm::vec3(0,0,0),10,0); // bl 0
-    m_ballMan.addMass(glm::vec3(-100,100,0),glm::vec3(0,0,0),10,0);  // tl 1
-    m_ballMan.addMass(glm::vec3(100,100,0),glm::vec3(0,0,0),10,0);   // tr 2
-    m_ballMan.addMass(glm::vec3(100,-100,0),glm::vec3(0,0,0),10,0);  // br 3
+void MainGame::initLevel(std::string filename){
     
-    const float k = 0.5f;
-    const float y = 0.05f;
-
-    m_ballMan.addSpring(0,1,k,200,y);
-    m_ballMan.addSpring(1,2,k,200,y);
-    m_ballMan.addSpring(2,3,k,200,y);
-    m_ballMan.addSpring(3,0,k,200,y);
-    m_ballMan.addSpring(0,2,k,283,y);
-    m_ballMan.addSpring(1,3,k,283,y);
+    ObjectLoader ol;
+    ol.initializeBallManagerFromFile(&m_ballMan, filename);
+    
+    
+    
+//    
+//    
+//    m_ballMan.init(4);
+//    
+//    m_ballMan.addMass(glm::vec3(-100,-100,0),glm::vec3(0,10,0),10,100); // bl 0
+//    m_ballMan.addMass(glm::vec3(-100,100,0),glm::vec3(0,-10,0),10,100);  // tl 1
+//    m_ballMan.addMass(glm::vec3(100,100,0),glm::vec3(0,0,0),10,100);   // tr 2
+//    m_ballMan.addMass(glm::vec3(100,-100,0),glm::vec3(0,0,0),10,100);  // br 3
+//    
+//    const float k = 0.1f;
+//    const float y = 0.0f;
+//
+//    m_ballMan.addSpring(0,1,k,200,y);
+//    m_ballMan.addSpring(1,2,k,200,y);
+//    m_ballMan.addSpring(2,3,k,200,y);
+//    m_ballMan.addSpring(3,0,k,200,y);
+//    m_ballMan.addSpring(0,2,k,283,y);
+//    m_ballMan.addSpring(1,3,k,283,y);
 }
 
 

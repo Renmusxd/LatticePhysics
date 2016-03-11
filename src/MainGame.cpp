@@ -60,7 +60,7 @@ void MainGame::initShaders() {
 }
 
 void MainGame::gameLoop() {
-    const float DESIRED_FPS = 60.0f;
+    const float DESIRED_FPS = 120.0f;
     const int MAX_PHYSICS_STEPS = 6;
     const float CAMERA_SCALE = 1.0 / 2.0f;
     m_camera.setScale(CAMERA_SCALE);
@@ -194,36 +194,22 @@ void MainGame::drawHud(){
 }
 
 void MainGame::initLevel(){
-    m_ballMan.init(m_screenWidth, m_screenHeight,glm::vec2(0,-0.1f));
-    
-    m_ballMan.addBall(glm::vec2(-100,-100),glm::vec2(0,25),10); // bl 0
-    m_ballMan.addBall(glm::vec2(-100,100),glm::vec2(0,25),10);  // tl 1
-    m_ballMan.addBall(glm::vec2(100,100),glm::vec2(0,25),10);   // tr 2
-    m_ballMan.addBall(glm::vec2(100,-100),glm::vec2(0,25),10);  // br 3
-    
-    float offset = 200;
-    
-    m_ballMan.addBall(glm::vec2(offset-100,offset-100),glm::vec2(0,25),10); // bl 4
-    m_ballMan.addBall(glm::vec2(offset-100,offset+100),glm::vec2(0,25),10); // tl 5
-    m_ballMan.addBall(glm::vec2(offset+100,offset+100),glm::vec2(0,25),10); // tr 6
-    m_ballMan.addBall(glm::vec2(offset+100,offset-100),glm::vec2(0,25),10); // br 7
+    m_ballMan.init(m_screenWidth, m_screenHeight,4);
+//    
+    m_ballMan.addMass(glm::vec3(-100,-100,0),glm::vec3(0,0,0),10,0); // bl 0
+    m_ballMan.addMass(glm::vec3(-100,100,0),glm::vec3(0,0,0),10,0);  // tl 1
+    m_ballMan.addMass(glm::vec3(100,100,0),glm::vec3(0,0,0),10,0);   // tr 2
+    m_ballMan.addMass(glm::vec3(100,-100,0),glm::vec3(0,0,0),10,0);  // br 3
     
     const float k = 0.5f;
     const float y = 0.05f;
-        
-    m_ballMan.m_balls[0].addSpring(&m_ballMan.m_balls[1],250,k,y);
-    m_ballMan.m_balls[1].addSpring(&m_ballMan.m_balls[2],250,k,y);
-    m_ballMan.m_balls[2].addSpring(&m_ballMan.m_balls[3],250,k,y);
-    m_ballMan.m_balls[3].addSpring(&m_ballMan.m_balls[0],250,k,y);
-    m_ballMan.m_balls[0].addSpring(&m_ballMan.m_balls[2],353,k,y);
-    m_ballMan.m_balls[1].addSpring(&m_ballMan.m_balls[3],353,k,y);
-    
-    m_ballMan.m_balls[4].addSpring(&m_ballMan.m_balls[5],250,k,y);
-    m_ballMan.m_balls[5].addSpring(&m_ballMan.m_balls[6],250,k,y);
-    m_ballMan.m_balls[6].addSpring(&m_ballMan.m_balls[7],250,k,y);
-    m_ballMan.m_balls[7].addSpring(&m_ballMan.m_balls[4],250,k,y);
-    m_ballMan.m_balls[4].addSpring(&m_ballMan.m_balls[6],353,k,y);
-    m_ballMan.m_balls[5].addSpring(&m_ballMan.m_balls[7],353,k,y);
+
+    m_ballMan.addSpring(0,1,k,200,y);
+    m_ballMan.addSpring(1,2,k,200,y);
+    m_ballMan.addSpring(2,3,k,200,y);
+    m_ballMan.addSpring(3,0,k,200,y);
+    m_ballMan.addSpring(0,2,k,283,y);
+    m_ballMan.addSpring(1,3,k,283,y);
 }
 
 

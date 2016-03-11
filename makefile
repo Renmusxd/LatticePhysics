@@ -1,4 +1,3 @@
-
 TARGET = physics
 CC=g++
 
@@ -22,27 +21,32 @@ SDL_LIB     := -L$(ENGINE_LIB) -l$(ENGINE_NAME) -lSDL2 -lSDL2_ttf -lSDL2_mixer -
 INCPATH 	:= -I/usr/local/include -I$(IDIR) -I$(ENGINE_INC)
 LDFLAGS     := $(SDL_LIB)
 
-CFLAGS :=-c -Wall -std=c++11 $(INCPATH) -O3
+CFLAGS :=-c -Wall -std=c++11 $(INCPATH)
 
 .PHONY: clean all default
 
+
 default: $(TARGET)
 all: default
+
+opt: CFLAGS += -O3
+opt: $(TARGET)
 
 debug: CFLAGS += -DDEBUG -g
 debug: $(TARGET)
 
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(HEADERS)
+	cd GameEngine && $(MAKE)
+	cd ..
 	$(CC) $(CFLAGS) $< -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(HEADERS)
 	$(CC) $(CFLAGS) $< -o $@
 
 $(TARGET): $(OBJECTS)
-	cd GameEngine && $(MAKE)
-	cd ..
 	$(CC) $^ -o $@ $(LDFLAGS)
 
 clean:
-	rm obj/* $(TARGET)
+	rm -f obj/* $(TARGET)
+	rm -f GameEngine/obj/* GameEngine/lib/*

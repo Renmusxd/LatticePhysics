@@ -21,16 +21,13 @@ SDL_LIB     := -L$(ENGINE_LIB) -l$(ENGINE_NAME) -lSDL2 -lSDL2_ttf -lSDL2_mixer -
 INCPATH 	:= -I/usr/local/include -I$(IDIR) -I$(ENGINE_INC)
 LDFLAGS     := $(SDL_LIB)
 
-CFLAGS :=-c -Wall -std=c++11 $(INCPATH)
+CFLAGS :=-c -Wall -std=c++11 -O3 $(INCPATH)
 
 .PHONY: clean all default
 
 
 default: $(TARGET)
 all: default
-
-opt: CFLAGS += -O3
-opt: $(TARGET)
 
 debug: CFLAGS += -DDEBUG -g
 debug: $(TARGET)

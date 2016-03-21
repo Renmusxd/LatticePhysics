@@ -5,6 +5,7 @@
  * Created on June 24, 2015, 9:55 PM
  */
 #include <cmath>
+#include <string.h>
 #include <GL/glew.h>
 #include <ResourceManager.h>
 #include "BallManager.h"
@@ -71,19 +72,21 @@ void BallManager::drawSprings(GameEngine::SpriteBatch& sb){
             if (m_springs[i][j].k<=0.0) continue;
             
             glm::vec3 difpos = (m_masses[j].pos - m_masses[i].pos);
-            float dist = glm::length(difpos);
+            float dist3 = glm::length(difpos);
+            float dist2 = glm::length(glm::vec2(difpos.x,difpos.y));
             glm::vec3 mid = m_masses[i].pos + (difpos*0.5f);
             glm::vec4 uvRect = glm::vec4(0.0f,0.0f,1.0f,1.0f);
-            glm::vec4 destRect = glm::vec4(mid.x-dist/2,mid.y,dist,2);
+            glm::vec4 destRect = glm::vec4(mid.x-dist2/2,mid.y,dist2,2);
 
             GLubyte R = 255; GLubyte B = 255;
             spring_struct s = m_springs[i][j];
-            if (dist>s.l){ B = 0;}
-            if (dist<s.l){ R = 0;}
+            if (dist3>s.l){ B = 0;}
+            if (dist3<s.l){ R = 0;}
             GameEngine::ColorRGBA8 color = GameEngine::ColorRGBA8(R,0,B,255);
-
+            
             glm::vec2 drawpos = glm::vec2(difpos.x, difpos.y);
-            sb.draw(destRect,uvRect,m_springtex,0.0f,color,glm::normalize(drawpos));
+            sb.draw(destRect,uvRect,m_springtex,0.0f,color,
+                    glm::normalize(drawpos));
         }
     }
 }

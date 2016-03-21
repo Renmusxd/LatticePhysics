@@ -7,6 +7,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <string.h>
 #include "ObjectLoader.h"
 
 ObjectLoader::ObjectLoader() {
@@ -62,6 +63,7 @@ bool ObjectLoader::initializeBallManagerFromFile
                 bm->addSpring(indx1,indx2,v2,v1,v3);
             }
         }
+        return true;
     } else {
         bm->init(0);
         return false;

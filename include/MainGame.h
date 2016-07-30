@@ -11,9 +11,6 @@
 
 #include "BallManager.h"
 
-const float HUMAN_SPEED = 1.0f;
-const float ZOMBIE_SPEED = 1.3f;
-
 enum class GameState{
     PLAY,
     EXIT
@@ -26,7 +23,7 @@ public:
     ~MainGame();
 
     /// Runs the game
-    void run(std::string filename);
+    void run(std::string filename, int iters);
 
     void setOutputFile(std::string filename);
 private:
@@ -66,5 +63,6 @@ private:
     float m_fps;
 
     BallManager m_ballMan;
+    int m_iters;
     
 };

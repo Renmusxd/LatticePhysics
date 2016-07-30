@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <Timing.h>
+#include <stdio.h>
 #include <ctime>
 #include <algorithm>
 #include <random>
@@ -25,9 +26,10 @@ MainGame::~MainGame() {
 
 }
 
-void MainGame::run(std::string filename) {
+void MainGame::run(std::string filename, int iters) {
 	initSystems();
 	initLevel(filename);
+        m_iters = iters;
 	gameLoop();
 }
 
@@ -101,6 +103,8 @@ void MainGame::gameLoop() {
         drawGame();
 
         m_fps = fpsLimiter.end();
+        
+        if (--m_iters == 0){m_gameState = GameState::EXIT;}
     }
 }
 

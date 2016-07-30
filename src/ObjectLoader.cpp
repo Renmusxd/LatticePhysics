@@ -40,10 +40,10 @@ bool ObjectLoader::initializeBallManagerFromFile
         bm->init(n_masses);
         
         
-        while ( getline (f,line) )
+        while ( getline(f,line) )
         {
             std::string cmd;
-            float v1, v2, v3, v4, v5, v6, v7, v8 = 0;
+            float v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11 = 0;
             int indx1, indx2 = 0;
             std::istringstream ss(line);
             ss >> cmd;
@@ -53,11 +53,19 @@ bool ObjectLoader::initializeBallManagerFromFile
                 frame.pos = glm::vec3(v1,v2,v3);
                 frame.vel = glm::vec3(v4,v5,v6);
             } else if (strncmp(cmd.c_str(),"MASS",4)==0){
-                ss >> v1 >> v2 >> v3 >> v4 >> v5 >> v6 >> v7 >> v8;
+                ss >> v1 >> v2 >> v3 // pos
+                   >> v4 >> v5 >> v6 // vel
+                   >> v7             // m
+                   >> v8 >> v9       // r
+                   >> v10 >> v11;    // r2
                 if (n_masses==0){
                     // ERROR! TOO MANY MASSES!
                 }
-                bm->addMass(frame.pos + glm::vec3(v1,v2,v3),frame.vel + glm::vec3(v4,v5,v6),v7,v8);
+                bm->addMass(frame.pos + glm::vec3(v1,v2,v3),
+                            frame.vel + glm::vec3(v4,v5,v6),
+                            v7,
+                            v8,v9,
+                            v10,v11);
             } else if (strncmp(cmd.c_str(),"SPRING",6)==0){
                 ss >> indx1 >> indx2 >> v1 >> v2 >> v3;
                 bm->addSpring(indx1,indx2,v2,v1,v3);

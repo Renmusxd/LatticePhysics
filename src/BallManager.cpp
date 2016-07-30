@@ -33,6 +33,15 @@ void BallManager::init(const int n_masses){
     for (int i = 0; i<m_size; i++){
         m_springs[i] = new spring_struct[m_size];
     }
+    if (m_writeOutput){
+        m_outputFileStream.open(m_outputFile);
+    }
+}
+
+void BallManager::destroy(){
+    if (m_writeOutput){
+        m_outputFileStream.close();
+    }
 }
 
 void BallManager::update(){
@@ -46,7 +55,15 @@ void BallManager::update(){
 }
 
 void BallManager::writeOutputToFile(){
-    
+    for (int i = 0; i<m_size; i++){
+        m_outputFileStream  << m_masses[i].pos[0] << "\t" 
+                            << m_masses[i].pos[1] << "\t"
+                            << m_masses[i].pos[2] << "\t"
+                            << m_masses[i].vel[0] << "\t" 
+                            << m_masses[i].vel[1] << "\t"
+                            << m_masses[i].vel[2] << "\t";
+    }
+    m_outputFileStream << "\n";
 }
 
 void BallManager::draw(GameEngine::SpriteBatch& sb){
@@ -151,21 +168,49 @@ void BallManager::calcStep(float t, float* src, float* dest){
                 spring_vy = (tx * r_x + ty*r_y + tz*r_z)*r_y;
                 spring_vz = (tx * r_x + ty*r_y + tz*r_z)*r_z;
             }
-            /* Gravity calculations */
-            float grav_pot = 0; 
-            if (d2>0){
-                grav_pot = -(m_masses[i].charge*m_masses[j].charge)/d2;
-            }
-            float grav_x = ((xj-xi)/d) * grav_pot;
-            float grav_y = ((yj-yi)/d) * grav_pot;
-            float grav_z = ((zj-zi)/d) * grav_pot;
             
-            dest[m_indx+3] += spring_x + spring_vx + grav_x;
-            dest[m_indx+4] += spring_y + spring_vy + grav_y;
-            dest[m_indx+5] += spring_z + spring_vz + grav_z;
-            dest[m_jndx+3] -= spring_x + spring_vx + grav_x;
-            dest[m_jndx+4] -= spring_y + spring_vy + grav_y;
-            dest[m_jndx+5] -= spring_z + spring_vz + grav_z;
+            /* 1/d^2 calculations */
+            float fr_x;
+            float fr_y;
+            float fr_z;
+            float fr_pot = 0;
+            
+            float fr2_x;
+            float fr2_y;
+            float fr2_z;
+            float fr2_pot = 0;
+            
+            if (d2>0){
+                fr_pot = -(m_masses[i].neg_r2*m_masses[j].neg_r2);
+                fr_pot +=  (m_masses[i].pos_r2*m_masses[j].pos_r2);
+                fr_pot /= d;
+                
+                fr_x = ((xj-xi)/d) * fr_pot;
+                fr_y = ((yj-yi)/d) * fr_pot;
+                fr_z = ((zj-zi)/d) * fr_pot;
+                
+                fr2_pot = -(m_masses[i].neg_r2*m_masses[j].neg_r2);
+                fr2_pot +=  (m_masses[i].pos_r2*m_masses[j].pos_r2);
+                fr2_pot /= d2;
+                
+                fr2_x = ((xj-xi)/d) * fr2_pot;
+                fr2_y = ((yj-yi)/d) * fr2_pot;
+                fr2_z = ((zj-zi)/d) * fr2_pot;
+            } else {
+                fr_x  = 0;
+                fr_y  = 0;
+                fr_z  = 0;
+                fr2_x = 0;
+                fr2_y = 0;
+                fr2_z = 0;
+            }
+            
+            dest[m_indx+3] += spring_x + spring_vx + fr_x + fr2_x;
+            dest[m_indx+4] += spring_y + spring_vy + fr_y + fr2_y;
+            dest[m_indx+5] += spring_z + spring_vz + fr_z + fr2_z;
+            dest[m_jndx+3] -= spring_x + spring_vx + fr_x + fr2_x;
+            dest[m_jndx+4] -= spring_y + spring_vy + fr_y + fr2_y;
+            dest[m_jndx+5] -= spring_z + spring_vz + fr_z + fr2_z;
         }
     }
 }
@@ -288,8 +333,9 @@ glm::vec3 BallManager::getCM(){
     return m_cm;
 }
 
-void BallManager::addMass(glm::vec3 pos, glm::vec3 vel, float mass, float charge){
-    mass_struct m(pos,vel,mass,charge);
+void BallManager::addMass(glm::vec3 pos, glm::vec3 vel, float mass, 
+                          float fpos_r, float fneg_r, float fpos_r2, float fneg_r2){
+    mass_struct m(pos,vel,mass,fpos_r,fneg_r,fpos_r2,fneg_r2);
     m_masses[m_index] = m;
     
     for (unsigned int i = 0; i<m_size; i++){

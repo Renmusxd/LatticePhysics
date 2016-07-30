@@ -2,6 +2,9 @@
 
 import sys
 
+MASS_FORMAT = "MASS {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10}"
+SPRING_FORMAT = "SPRING {0} {1} {2} {3} {4}"
+
 def make_cubic(xs, ys, zs, d, m, q, k, gamma):
     to_write = []
     xs, ys, zs = int(xs), int(ys), int(zs)
@@ -17,8 +20,7 @@ def make_cubic(xs, ys, zs, d, m, q, k, gamma):
             for z in range(zs):
                 index_dict[(x,y,z)] = index
                 index += 1
-                to_write.append("MASS {0} {1} {2} {3} {4} {5} {6} {7}".format(
-                        x*d, y*d, z*d, 0, 0, 0, m, q))
+                to_write.append(MASS_FORMAT.format(x*d, y*d, z*d, 0, 0, 0, m, 0, 0, 0, q))
     index = 0
     for x in range(xs):
         for y in range(ys):
@@ -32,8 +34,7 @@ def make_cubic(xs, ys, zs, d, m, q, k, gamma):
                 adj_indxs.append( index_dict.get((x,y,z-1)) )
                 for adj_indx in adj_indxs:
                     if adj_indx:
-                        to_write.append("SPRING {0} {1} {2} {3} {4}".format(
-                            index,adj_indx,d,k,gamma))
+                        to_write.append(SPRING_FORMAT.format(index,adj_indx,d,k,gamma))
                 index += 1
     return to_write
 
@@ -58,8 +59,7 @@ def make_cubic_kick_line(xs, ys, zs, d, m, q, k, gamma, kx, ky, kz):
                 kkx = 0 if x!=0 else kx
                 kky = 0 if x!=0 else ky
                 kkz = 0 if x!=0 else kz
-                to_write.append("MASS {0} {1} {2} {3} {4} {5} {6} {7}".format(
-                        x*d, y*d, z*d, kkx, kky, kkz, m, q))
+                to_write.append(MASS_FORMAT.format(x*d, y*d, z*d, kkx, kky, kkz, m, 0, 0, 0, q))
     index = 0
     for x in range(xs):
         for y in range(ys):
@@ -73,8 +73,7 @@ def make_cubic_kick_line(xs, ys, zs, d, m, q, k, gamma, kx, ky, kz):
                 adj_indxs.append( index_dict.get((x,y,z-1)) )
                 for adj_indx in adj_indxs:
                     if adj_indx:
-                        to_write.append("SPRING {0} {1} {2} {3} {4}".format(
-                            index,adj_indx,d,k,gamma))
+                        to_write.append(SPRING_FORMAT.format(index,adj_indx,d,k,gamma))
                 index += 1
     return to_write
 

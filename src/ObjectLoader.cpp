@@ -38,8 +38,7 @@ bool ObjectLoader::initializeBallManagerFromFile(BallManager* bm, std::string fi
         bm->init(n_masses);
         
         
-        while ( getline(f,line) )
-        {
+        while (getline(f,line)) {
             std::string cmd;
             float v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11 = 0;
             int indx1, indx2 = 0;

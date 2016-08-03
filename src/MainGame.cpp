@@ -37,7 +37,7 @@ void MainGame::initSystems() {
     // SDL
     GameEngine::init();
 
-    m_window.create("Physics",m_screenWidth,m_screenHeight,0);
+    m_window.create("Space Jello",m_screenWidth,m_screenHeight,0);
     glClearColor(0,0,0,1.0f);
     initShaders();
 
@@ -46,7 +46,7 @@ void MainGame::initSystems() {
     m_hudSpriteBatch.init();
 
     // Init font (after sdl init)
-//    _spriteFont = new GameEngine::SpriteFont("Fonts/chintzy.ttf", 32);
+    // _spriteFont = new GameEngine::SpriteFont("Fonts/font.ttf", 32);
 
     m_camera.init(m_screenWidth, m_screenHeight);
     m_hudCamera.init(m_screenWidth, m_screenHeight);
@@ -173,24 +173,12 @@ void MainGame::drawGame() {
 }
 
 void MainGame::drawHud(){
-//    char buffer[256]; // bigger than needed
-
     glm::mat4 projectionMatrix = m_hudCamera.getCameraMatrix();
     GLint pUniform = m_textureProgram.getUniformLocation("P");
     glUniformMatrix4fv(pUniform,1,GL_FALSE, &projectionMatrix[0][0]);
     
     m_hudSpriteBatch.begin();
-
-//    std::sprintf(buffer, "Num Humans %lu", _humans.size());
-//    _spriteFont->draw(
-//            _hudSpriteBatch,					// To
-//            buffer,						// From
-//            glm::vec2(0,10),					// Where
-//            glm::vec2(1.0),                                   // Size
-//            0.0f,						// Depth
-//            GameEngine::ColorRGBA8(0,0,0,255)                 // Tint
-//            );
-
+    // Written information
     m_hudSpriteBatch.end();
     m_hudSpriteBatch.renderBatch();
 }

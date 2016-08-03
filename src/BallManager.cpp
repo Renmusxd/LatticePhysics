@@ -9,7 +9,6 @@
 #include <GL/glew.h>
 #include <ResourceManager.h>
 #include "BallManager.h"
-#include "Vertex.h"
 
 
 BallManager::BallManager() {
@@ -20,8 +19,6 @@ BallManager::~BallManager() {
 }
 
 void BallManager::init(const int n_masses){
-//    m_width = width;
-//    m_height = height;
     m_springtex = GameEngine::ResourceManager::getTexture("Textures/spring.png").id;
     m_masstex = GameEngine::ResourceManager::getTexture("Textures/circle.png").id;
     m_masscolor = GameEngine::ColorRGBA8(255,255,255,255);
@@ -236,24 +233,24 @@ void BallManager::updateMasses(float h){
     
     // Now calc k1
     for (int i = 0; i<m_size; i++){
-        v[6*i]   = m_masses[i].pos.x + 0.5*k0[6*i];
-        v[6*i+1] = m_masses[i].pos.y + 0.5*k0[6*i+1];
-        v[6*i+2] = m_masses[i].pos.z + 0.5*k0[6*i+2];
-        v[6*i+3] = m_masses[i].vel.x + 0.5*k0[6*i+3];
-        v[6*i+4] = m_masses[i].vel.y + 0.5*k0[6*i+4];
-        v[6*i+5] = m_masses[i].vel.z + 0.5*k0[6*i+5];
+        v[6*i]   = m_masses[i].pos.x + 0.5f*k0[6*i];
+        v[6*i+1] = m_masses[i].pos.y + 0.5f*k0[6*i+1];
+        v[6*i+2] = m_masses[i].pos.z + 0.5f*k0[6*i+2];
+        v[6*i+3] = m_masses[i].vel.x + 0.5f*k0[6*i+3];
+        v[6*i+4] = m_masses[i].vel.y + 0.5f*k0[6*i+4];
+        v[6*i+5] = m_masses[i].vel.z + 0.5f*k0[6*i+5];
     }
     float k1[6*m_size];
     calcStep(t0 + 0.5*h,v,k1);
     
     // Now calc k2
     for (int i = 0; i<m_size; i++){
-        v[6*i]   = m_masses[i].pos.x + 0.5*k1[6*i];
-        v[6*i+1] = m_masses[i].pos.y + 0.5*k1[6*i+1];
-        v[6*i+2] = m_masses[i].pos.z + 0.5*k1[6*i+2];
-        v[6*i+3] = m_masses[i].vel.x + 0.5*k1[6*i+3];
-        v[6*i+4] = m_masses[i].vel.y + 0.5*k1[6*i+4];
-        v[6*i+5] = m_masses[i].vel.z + 0.5*k1[6*i+5];
+        v[6*i]   = m_masses[i].pos.x + 0.5f*k1[6*i];
+        v[6*i+1] = m_masses[i].pos.y + 0.5f*k1[6*i+1];
+        v[6*i+2] = m_masses[i].pos.z + 0.5f*k1[6*i+2];
+        v[6*i+3] = m_masses[i].vel.x + 0.5f*k1[6*i+3];
+        v[6*i+4] = m_masses[i].vel.y + 0.5f*k1[6*i+4];
+        v[6*i+5] = m_masses[i].vel.z + 0.5f*k1[6*i+5];
     }
     float k2[6*m_size];
     calcStep(t0 + 0.5*h,v,k2);

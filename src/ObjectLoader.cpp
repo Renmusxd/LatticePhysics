@@ -24,9 +24,7 @@ struct frame_struct{
     }
 };
 
-bool ObjectLoader::initializeBallManagerFromFile
-                    (BallManager* bm, std::string filename)
-{
+bool ObjectLoader::initializeBallManagerFromFile(BallManager* bm, std::string filename){
     /* Loads a file into a ball manager */
     std::string line;
     std::ifstream f(filename);
